@@ -1,0 +1,48 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "Ubuntu",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root",
+    // //  Explicit declaration of user as 'vscode', although it's the default.
+    "remoteUser": "vscode",
+
+    //  Set ENVIRONMENT variables. Be mindful of static (i.e. no requirement to be updated, to use 'containerEnv') vs dynamic (i.e. value can / should change, to use 'remoteEnv') values.
+    //  - Set environment variables. Ref: 'https://code.visualstudio.com/remote/advancedcontainers/environment-variables'.
+    //  - 'containerEnv' vs. 'remoteEnv'. Ref: 'https://github.com/devcontainers/spec/issues/233#issuecomment-1530069229', 'https://containers.dev/implementors/json_reference/'.
+    //  'containerEnv': for STATIC values, declared BEFORE container is created. Ref.: 'https://github.com/microsoft/vscode-remote-release/issues/2324#issuecomment-584700252'.
+    "containerEnv": {
+        "JAVA_HOME": "/usr/lib/jvm/java-17-openjdk-amd64"
+    },
+    //  'remoteEnv': evaluated AFTER container is created (i.e. used by SPECIFIC TOOL spinning up docker image; e.g. VS Code); therefore, it's way to go to UPDATE enviroment variables. Ref.: 'https://github.com/microsoft/vscode-remote-release/issues/2324#issuecomment-584700252'.
+    //  - Since it's TOOL DEPENDENT, in order to UPDATE environment variables BEFORE container is created, alternatives are to add it to the Dockerfile or look to apply workarounds such as updating the '.bashrc' file.
+    "remoteEnv": {
+        "PATH": "${containerEnv:PATH}:${containerEnv:JAVA_HOME}/bin"
+    },
+
+    // Configure tool-specific properties.
+    "customizations": {
+		"vscode": {
+			"extensions": [
+                // 'Java', by Oracle. Ref: 'https://marketplace.visualstudio.com/items?itemName=Oracle.oracle-java'.
+                // WARNING: this extension loads BEFORE packages and libraries from 'post_create_command.sh' are installed, so it throws an error of JDK not found.
+                // - Go through image creation as normal, expect the error of JDK not found, wait for image to fully load, then DISABLE the extension (and restart window as requested by the extension), and then RE-ENABLE it.
+				"Oracle.oracle-java"
+			]
+		}
+	},
+
+    // Use 'postCreateCommand' to run commands AFTER the container is created.
+	"postCreateCommand": "bash './.devcontainer/post_create_command.sh'"
+
+}
+// EOF.
