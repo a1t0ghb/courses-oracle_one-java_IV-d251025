@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- FOLLOW NAMING CONVENTION:
+    - Naming conventions. Ref.: 'https://stackoverflow.com/questions/3724415/maven-groupid-and-artifactid-naming/3724851#3724851'.
+    - Maven Coordinates: 'groupId', 'artifactId', and 'version', as MINIMUM identifier fields. Ref.: 'https://maven.apache.org/pom.html#Maven_Coordinates', 'https://maven.apache.org/guides/introduction/introduction-to-the-pom.html#What_is_a_POM\.3F'.
+    -->
+    <!-- 'groupId' identifier:
+    - e.g. 'org.apache.maven' (as parent project group), 'org.apache.maven.plugins' (as subgroup).
+    - Generally unique, to follow Java's package name rules; i.e. starts with a reversed domain name. Ref.: 'https://maven.apache.org/guides/mini/guide-naming-conventions.html#Project_group_identifier'.
+    - Usually use 'dot notation' (NOT REQUIRED but RECOMMENDED), and limited to letters, numbers and underscore (Java's package name rules). Ref.: 'https://docs.oracle.com/javase/specs/jls/se21/html/jls-6.html#d5e8762'.
+    - 'dot notation'. Ref.: 'https://maven.apache.org/pom.html#Maven_Coordinates'.
+      - Is NOT REQUIRED to match package structure of project (i.e. folders), but RECOMMENDED.
+      - In a repo., dots ARE REPLACED by the specific OS separator (e.g. '/' for linux, '\' for Windows); e.g. 'org.codehaus.mojo' > '$M2_REPO/org/codehaus/mojo'.
+    -->
+    <groupId>a1t0ghb.courses_oracle_one</groupId>
+    <!-- 'artifactId' identifier:
+    - e.g. 'maven', 'commons-math', 'app_match' (underscores, not part of naming conventions).
+    - Only lowercase letters, digits and hyphens (ideally), but underscores also usable. Ref.: 'https://maven.apache.org/guides/mini/guide-naming-conventions.html#Artifact_identifier'.
+    - RECOMMENDATION: project's folder name SHOULD MATCH 'artifactId'. Ref.: 'https://www.sonatype.com/blog/2011/01/maven-tip-project-directories-and-artifact-ids'.
+    - Along with 'groupId' identifier, it defines the artifact's RELATIVE PATH within the repo.; e.g. 'my-project' > '$M2_REPO/org/codehaus/mojo/my-project'. Ref.: 'https://maven.apache.org/pom.html#Maven_Coordinates'.
+    -->
+    <artifactId>course_java_iv</artifactId>
+    <!-- 'version' identifier:
+    - e.g. '1.0.0', '1.0.0-beta' (with labels), '1.0.0-SNAPSHOT' (label for unstable versions).
+    - Recommended to follow convention of 'Semantic Versioning 1.0.0' (major, minor, patch). Ref.: 'https://maven.apache.org/guides/mini/guide-naming-conventions.html#Version_identifier', 'https://semver.org/spec/v1.0.0.html'.
+    - Versions with '-SNAPSHOT' label included, are considered un-stable, for testing purposes, unlike releases. They are threated differently when deploying IF there is a 'snapshotRepository' identifier defined.
+    - It separates versions of a project; e.g. '1.0' > '$M2_REPO/org/codehaus/mojo/my-project/1.0'. Ref.: 'https://maven.apache.org/pom.html#Maven_Coordinates'.
+    -->
+    <version>1.0.0-SNAPSHOT</version>
+    <!-- 'packaging' identifier:
+    - By default, Maven assumes 'jar' if not declared, although there are other options: 'jar' (default), 'pom', 'maven-plugin', 'ejb', 'war', 'ear', and 'rar'. Ref.: 'https://maven.apache.org/pom.html#Packaging'.
+    -->
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release>
+        <!-- Follows Maven's Standard Directory Layout. Ref.: 'https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html'.
+        - Main source for libraries: 'src/main/java'.
+        - Example. Ref.: 'https://medium.com/@pvprasanth474/understanding-the-maven-directory-structure-a-simple-guide-7c7d636ec614'.
+        -->
+        <exec.mainClass>a1t0ghb.courses_oracle_one.course_java_iv.App</exec.mainClass>
+    </properties>
+</project>
+<!-- EOF. -->
