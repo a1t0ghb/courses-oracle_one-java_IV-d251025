@@ -9,8 +9,13 @@ package a1t0ghb.courses_oracle_one.course_java_iv.models;
 //  IMPORTS: external classes and interfaces.
 
 //  IMPORTS - UTILITIES.
-//  Shortcut for importing ALL Java Utils: 'import java.util.*;'.
-//  Interface 'Comparable' DOESN'T REQUIRE import.
+//  Java utilities:
+//  - Shortcut for importing ALL Java Utils: 'import java.util.*;'.
+//  - Interface 'Comparable' DOESN'T REQUIRE import.
+
+//  JSON:
+//  - 'Gson': 'https://github.com/google/gson', 'https://www.javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html'.
+import com.google.gson.annotations.SerializedName;                  //  JSON transformations: match class attributes to JSON fields.
 
 //  IMPORTS - CUSTOM CLASSES AND CUSTOM INTERFACES.
 
@@ -22,7 +27,9 @@ public class Titulo implements Comparable<Titulo> {
 
     //  ATTRIBUTES DECLARATION.
     //  - Declaration of basic ATTRIBUTES of any title (movie or series). Level of access; i.e. 'private', 'public', 'protected' (or default, if not specified), usually comes from 'business rules'.
+    @SerializedName("Title")                    //  Gson: matches JSON field to class attribute.
     private String nombre;
+    @SerializedName("Year")                     //  Gson: matches JSON field to class attribute.
     private int fechaDeLanzamiento;
     private int duracionEnMinutos;
     private boolean incluidoEnElPlan;
@@ -81,6 +88,14 @@ public class Titulo implements Comparable<Titulo> {
     }
 
     //  INHERITED METHODS TO OVERRIDE: custom definitions for CURRENT class.
+
+    //  Overrides from superclass 'Object'.
+    //  - IMPORT: unnecessary.
+    @Override
+    public String toString() {
+        // return super.toString();         //  Default definition.
+        return "Titulo: " + getNombre() + " (" + getFechaDeLanzamiento() + ")";
+    }
 
     //  METHODS FROM 'IMPLEMENTS'.
 

@@ -8,21 +8,26 @@ package a1t0ghb.courses_oracle_one.course_java_iv;
 
 //  IMPORTS: external classes and interfaces.
 
-//  IMPORTS - Utilities.
-//  Shortcut for importing ALL Java Utils: 'import java.util.*;'.
-import java.util.Scanner;
+//  IMPORTS - UTILITIES.
+//  Java utilities:
+//  - Shortcut for importing ALL Java Utils: 'import java.util.*;'.
+import java.util.Scanner;               //  User input via console / terminal.
 
-//  Imports for HTTP requests.
+//  HTTP requests:
 //  - Client: 'https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpRequest.html'.
 //  - HTTP response: 'https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpResponse.html'.
-//  -  Handle exceptions (i.e. possible errors) from method '.send()'.
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.net.http.HttpClient;        //  HTTP requests.
+import java.net.http.HttpRequest;       //  HTTP requests.
+import java.net.URI;                    //  HTTP requests.
+import java.net.http.HttpResponse;      //  HTTP requests.
+import java.io.IOException;             //  To handle IO exceptions (i.e. possible errors); e.g. when making an HTTP request, from method '.send()'.
+
+//  JSON:
+//  - 'Gson': 'https://github.com/google/gson', 'https://www.javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html'.
+import com.google.gson.Gson;            //  JSON transformations.
 
 //  IMPORTS - CUSTOM CLASSES AND CUSTOM INTERFACES.
+import a1t0ghb.courses_oracle_one.course_java_iv.models.Titulo;
 
 /**
  *
@@ -55,7 +60,15 @@ public class AppConBusqueda {
                 .send(request, HttpResponse.BodyHandlers.ofString());   //  Method '.send()' requires handle EXCEPTIONS. For now, will be added to 'public static void main(String[] args) { ... }'.
 
             //  Prints body of HTTP request; i.e. JSON, in raw format.
-            System.out.println(response.body());
+            String json = response.body();
+            System.out.println(json);
+
+            //  Create instance for JSON tranformations.
+            Gson gson = new Gson();
+            //  NOTE: to match class attributes vs. JSON fields, it requires to use ANNOTATIONS in class; i.e. 'Titulo'.
+            Titulo miTitulo = gson.fromJson(json, Titulo.class);
+            // System.out.println("Titulo: " + miTitulo.getNombre());      //  When not having defined method of '.toString()'.
+            System.out.println(miTitulo);
 
         }
 
