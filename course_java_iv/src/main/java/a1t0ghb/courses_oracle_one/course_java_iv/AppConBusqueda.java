@@ -12,6 +12,7 @@ package a1t0ghb.courses_oracle_one.course_java_iv;
 //  Java utilities:
 //  - Shortcut for importing ALL Java Utils: 'import java.util.*;'.
 import java.util.Scanner;                       //  User input via console / terminal.
+import java.io.FileWriter;                      //  Export content to local drive.
 
 //  HTTP requests:
 //  - Client: 'https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpRequest.html'.
@@ -39,7 +40,7 @@ import a1t0ghb.courses_oracle_one.course_java_iv.exceptions.ErrorEnConversionDeD
  */
 public class AppConBusqueda {
 
-    @SuppressWarnings("UseSpecificCatch")
+    @SuppressWarnings({"UseSpecificCatch", "ConvertToTryWithResources"})
     public static void main(String[] args) throws IOException, InterruptedException {
         // System.out.println("Hello World!");
 
@@ -93,6 +94,11 @@ public class AppConBusqueda {
 
                 Titulo miTitulo = new Titulo(miTituloOmdb);                 //  This approach requires a NEW CONSTRUCTOR for 'Titulo' that receives an instace of 'TituloOmdb'.
                 System.out.println("Info. titulo (convertido):\n" + miTitulo + "\n");
+
+                //  Export as txt.
+                FileWriter escritura = new FileWriter("peliculas.txt");
+                escritura.write(miTitulo.toString());                       //  Export instance of 'Titulo', by default to PROJECT FOLDER (not inside any 'package'); e.g. '.../course_java_iv/peliculas.txt'
+                escritura.close();                                          //  Close IO.
                 
             } catch (NumberFormatException e) {
                 System.out.println("Ocurrio un error: " + e.getMessage());
