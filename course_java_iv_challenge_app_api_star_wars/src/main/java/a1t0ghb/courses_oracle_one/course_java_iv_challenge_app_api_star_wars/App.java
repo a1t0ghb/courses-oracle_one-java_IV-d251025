@@ -11,10 +11,12 @@ package a1t0ghb.courses_oracle_one.course_java_iv_challenge_app_api_star_wars;
 //  Java utilities:
 //  - Shortcut for importing ALL Java Utils: 'import java.util.*;'.
 import java.util.Scanner;                       //  User input via console / terminal.
+import java.io.IOException;
 
 //  IMPORTS - CUSTOM CLASSES.
-import a1t0ghb.courses_oracle_one.course_java_iv_challenge_app_api_star_wars.models.ConsultaPelicula;
+import a1t0ghb.courses_oracle_one.course_java_iv_challenge_app_api_star_wars.utilities.ConsultaPelicula;
 import a1t0ghb.courses_oracle_one.course_java_iv_challenge_app_api_star_wars.models.Pelicula;
+import a1t0ghb.courses_oracle_one.course_java_iv_challenge_app_api_star_wars.utilities.GeneradorDeArchivo;
 
 /**
  *
@@ -45,12 +47,14 @@ public class App {
                 var numeroDePelicula = Integer.valueOf(lectura.nextLine());
                 Pelicula pelicula = consulta.buscaPelicula(numeroDePelicula);
                 System.out.println(pelicula);
+                GeneradorDeArchivo generador = new GeneradorDeArchivo();
+                generador.guardarJson(pelicula);
 
             } catch (NumberFormatException e) {
 
                 System.out.println("Número no encontrado: " + e.getMessage());
 
-            } catch (RuntimeException e) {
+            } catch (RuntimeException | IOException e) {
 
                 System.out.println(e.getMessage());
                 System.out.println("Finalizó ejecución del programa.\n");

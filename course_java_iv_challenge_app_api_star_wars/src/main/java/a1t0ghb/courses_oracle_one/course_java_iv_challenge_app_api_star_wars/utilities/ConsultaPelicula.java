@@ -4,7 +4,7 @@
  */
 
 //  Package location definition.
-package a1t0ghb.courses_oracle_one.course_java_iv_challenge_app_api_star_wars.models;
+package a1t0ghb.courses_oracle_one.course_java_iv_challenge_app_api_star_wars.utilities;
 
 //  IMPORTS - UTILITIES.
 //  Java utilities:
@@ -24,6 +24,7 @@ import java.net.http.HttpResponse;              //  HTTP requests.
 import com.google.gson.Gson;                    //  JSON transformations.
 
 //  IMPORTS - CUSTOM CLASSES AND CUSTOM INTERFACES.
+import a1t0ghb.courses_oracle_one.course_java_iv_challenge_app_api_star_wars.models.Pelicula;
 
 /**
  *
