@@ -13,9 +13,9 @@ package a1t0ghb.courses_oracle_one.course_java_iv.models;
 //  - Shortcut for importing ALL Java Utils: 'import java.util.*;'.
 //  - Interface 'Comparable' DOESN'T REQUIRE import.
 
-//  JSON:
-//  - 'Gson': 'https://github.com/google/gson', 'https://www.javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html'.
-import com.google.gson.annotations.SerializedName;                  //  JSON transformations: match class attributes to JSON fields.
+// //  JSON:
+// //  - 'Gson': 'https://github.com/google/gson', 'https://www.javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html'.
+// import com.google.gson.annotations.SerializedName;                  //  JSON transformations: match class attributes to JSON fields (APPROACH 1: direct JSON mapping, without RECORD file 'TituloOmdb').
 
 //  IMPORTS - CUSTOM CLASSES AND CUSTOM INTERFACES.
 
@@ -27,9 +27,9 @@ public class Titulo implements Comparable<Titulo> {
 
     //  ATTRIBUTES DECLARATION.
     //  - Declaration of basic ATTRIBUTES of any title (movie or series). Level of access; i.e. 'private', 'public', 'protected' (or default, if not specified), usually comes from 'business rules'.
-    @SerializedName("Title")                    //  Gson: matches JSON field to class attribute.
+    // @SerializedName("Title")                    //  Gson: matches JSON field to class attribute (APPROACH 1: direct JSON mapping, without RECORD file 'TituloOmdb').
     private String nombre;
-    @SerializedName("Year")                     //  Gson: matches JSON field to class attribute.
+    // @SerializedName("Year")                     //  Gson: matches JSON field to class attribute (APPROACH 1: direct JSON mapping, without RECORD file 'TituloOmdb').
     private int fechaDeLanzamiento;
     private int duracionEnMinutos;
     private boolean incluidoEnElPlan;
@@ -42,6 +42,16 @@ public class Titulo implements Comparable<Titulo> {
     public Titulo(String nombre, int fechaDeLanzamiento) {
         this.nombre = nombre;
         this.fechaDeLanzamiento = fechaDeLanzamiento;
+    }
+
+    //  CONSTRUCTOR: when receiving a 'TituloOmdb' instance (Record), from API calls.
+    @SuppressWarnings("UnnecessaryTemporaryOnConversionFromString")
+    public Titulo(TituloOmdb tituloOmdb) {
+        //  Attributes from a 'Record' are accessed via the attribute name and parenthesis; THERE ARE NO GETTERS.
+        this.nombre = tituloOmdb.title();
+        this.fechaDeLanzamiento = Integer.valueOf(tituloOmdb.year());       //  Cast string to integer: 'https://stackoverflow.com/questions/508665/difference-between-parseint-and-valueof-in-java'.
+        this.duracionEnMinutos = Integer.valueOf(tituloOmdb.runtime()
+            .substring(0,2));                                               //  API returns string, such as '60 min'. Extract first 3 characters (in case +99 min, but still RISKY) to cast to Integer.
     }
 
     //  ATTRIBUTE'S 'GETTERS'.
@@ -94,7 +104,7 @@ public class Titulo implements Comparable<Titulo> {
     @Override
     public String toString() {
         // return super.toString();         //  Default definition.
-        return "Titulo: " + getNombre() + " (" + getFechaDeLanzamiento() + ")";
+        return "Titulo: '" + getNombre() + "' ('" + getFechaDeLanzamiento() + "'). Duración: '" + getDuracionEnMinutos() + "' min.";
     }
 
     //  METHODS FROM 'IMPLEMENTS'.

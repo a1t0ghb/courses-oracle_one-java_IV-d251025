@@ -11,22 +11,25 @@ package a1t0ghb.courses_oracle_one.course_java_iv;
 //  IMPORTS - UTILITIES.
 //  Java utilities:
 //  - Shortcut for importing ALL Java Utils: 'import java.util.*;'.
-import java.util.Scanner;               //  User input via console / terminal.
+import java.util.Scanner;                       //  User input via console / terminal.
 
 //  HTTP requests:
 //  - Client: 'https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpRequest.html'.
 //  - HTTP response: 'https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpResponse.html'.
-import java.net.http.HttpClient;        //  HTTP requests.
-import java.net.http.HttpRequest;       //  HTTP requests.
-import java.net.URI;                    //  HTTP requests.
-import java.net.http.HttpResponse;      //  HTTP requests.
-import java.io.IOException;             //  To handle IO exceptions (i.e. possible errors); e.g. when making an HTTP request, from method '.send()'.
+import java.net.http.HttpClient;                //  HTTP requests.
+import java.net.http.HttpRequest;               //  HTTP requests.
+import java.net.URI;                            //  HTTP requests.
+import java.net.http.HttpResponse;              //  HTTP requests.
+import java.io.IOException;                     //  To handle IO exceptions (i.e. possible errors); e.g. when making an HTTP request, from method '.send()'.
 
 //  JSON:
 //  - 'Gson': 'https://github.com/google/gson', 'https://www.javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html'.
-import com.google.gson.Gson;            //  JSON transformations.
+import com.google.gson.Gson;                    //  JSON transformations.
+import com.google.gson.GsonBuilder;             //  For JSON field naming support: 'https://github.com/google/gson/blob/main/UserGuide.md#json-field-naming-support'
+import com.google.gson.FieldNamingPolicy;       //  For JSON field naming support: 'https://github.com/google/gson/blob/main/UserGuide.md#json-field-naming-support'
 
 //  IMPORTS - CUSTOM CLASSES AND CUSTOM INTERFACES.
+import a1t0ghb.courses_oracle_one.course_java_iv.models.TituloOmdb;
 import a1t0ghb.courses_oracle_one.course_java_iv.models.Titulo;
 
 /**
@@ -63,13 +66,22 @@ public class AppConBusqueda {
             String json = response.body();
             System.out.println(json);
 
-            //  Create instance for JSON tranformations.
-            Gson gson = new Gson();
-            //  NOTE: to match class attributes vs. JSON fields, it requires to use ANNOTATIONS in class; i.e. 'Titulo'.
-            Titulo miTitulo = gson.fromJson(json, Titulo.class);
-            // System.out.println("Titulo: " + miTitulo.getNombre());      //  When not having defined method of '.toString()'.
-            System.out.println(miTitulo);
+            // //  Create instance for JSON tranformations (APPROACH 1: direct JSON mapping, without RECORD file 'TituloOmdb').
+            // Gson gson = new Gson();
+            // //  NOTE: to match class attributes vs. JSON fields, it requires to use ANNOTATIONS in class; i.e. 'Titulo'.
+            // Titulo miTitulo = gson.fromJson(json, Titulo.class);
+            // // System.out.println("Titulo: " + miTitulo.getNombre());      //  When not having defined method of '.toString()'.
+            // System.out.println(miTitulo);
 
+            //  Create instance for JSON tranformations (APPROACH 2: using JSON naming for JSON mapping, with RECORD file 'TituloOmdb').
+            Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)       //  To avoid manual mapping. Transform parameters according to policy, for easier matching.
+                .create();
+            TituloOmdb miTituloOmdb = gson.fromJson(json, TituloOmdb.class);
+            System.out.println("\nClase intermedia (Record) 'TituloOmdb':\n" + miTituloOmdb + "\n");
+            Titulo miTitulo = new Titulo(miTituloOmdb);                 //  This approach requires a NEW CONSTRUCTOR for 'Titulo' that receives an instace of 'TituloOmdb'.
+            System.out.println("Info. titulo:\n" + miTitulo + "\n");
+            
         }
 
     }
