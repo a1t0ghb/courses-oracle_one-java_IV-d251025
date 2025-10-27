@@ -41,5 +41,16 @@
         -->
         <exec.mainClass>a1t0ghb.courses_oracle_one.course_java_iv_challenge_app_api_star_wars.App</exec.mainClass>
     </properties>
+    <!-- Dependencies: 'https://maven.apache.org/repositories/dependencies.html'. -->
+    <dependencies>
+        <!-- [Maven repository] Gson - Java objects to JSON: 'https://mvnrepository.com/artifact/com.google.code.gson/gson'. -->
+        <!-- Gson with Maven: 'https://github.com/google/gson/blob/main/UserGuide.md#using-gson-with-maven'. -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>
 <!-- EOF. -->
