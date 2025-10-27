@@ -79,8 +79,16 @@ public class AppConBusqueda {
                 .create();
             TituloOmdb miTituloOmdb = gson.fromJson(json, TituloOmdb.class);
             System.out.println("\nClase intermedia (Record) 'TituloOmdb':\n" + miTituloOmdb + "\n");
-            Titulo miTitulo = new Titulo(miTituloOmdb);                 //  This approach requires a NEW CONSTRUCTOR for 'Titulo' that receives an instace of 'TituloOmdb'.
-            System.out.println("Info. titulo:\n" + miTitulo + "\n");
+
+            //  Try-catch exception 'e'. Cases:
+            //  - 'NumberFormatException': if a String can't be converted to Integer.
+            try {
+                Titulo miTitulo = new Titulo(miTituloOmdb);                 //  This approach requires a NEW CONSTRUCTOR for 'Titulo' that receives an instace of 'TituloOmdb'.
+                System.out.println("Info. titulo:\n" + miTitulo + "\n");
+            } catch (NumberFormatException e) {
+                System.out.println("Ocurrio un error: " + e.getMessage());
+            }
+            System.out.println("Finalizó ejecución del programa.");
             
         }
 
