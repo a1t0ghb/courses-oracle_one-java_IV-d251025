@@ -56,7 +56,7 @@ public class Pelicula extends Titulo implements Clasificacion {
     @Override
     public String toString() {
         // return super.toString();         //  Default definition.
-        return "Pelicula: " + super.getNombre() + " (" + super.getFechaDeLanzamiento() + ")";
+        return "Pelicula: '" + super.getNombre() + "' ('" + super.getFechaDeLanzamiento() + "').";
     }
     
     //  Overrides from superclass 'Titulo'.

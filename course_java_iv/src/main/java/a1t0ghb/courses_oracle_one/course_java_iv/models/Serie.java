@@ -69,7 +69,7 @@ public class Serie extends Titulo {
     @Override
     public String toString() {
         // return super.toString();         //  Default definition.
-        return "Serie: " + super.getNombre() + " (" + super.getFechaDeLanzamiento() + ")";
+        return "Serie: '" + super.getNombre() + "' ('" + super.getFechaDeLanzamiento() + "').";
     }
 
     //  Overrides from superclass 'Titulo'.
