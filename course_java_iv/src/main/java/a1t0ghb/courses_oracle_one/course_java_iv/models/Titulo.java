@@ -110,7 +110,7 @@ public class Titulo implements Comparable<Titulo> {
     @Override
     public String toString() {
         // return super.toString();         //  Default definition.
-        return "Titulo: '" + getNombre() + "' ('" + getFechaDeLanzamiento() + "'). Duración: '" + getDuracionEnMinutos() + "' min.";
+        return "(Titulo: '" + getNombre() + "' ('" + getFechaDeLanzamiento() + "'). Duración: '" + getDuracionEnMinutos() + "' min.)";
     }
 
     //  METHODS FROM 'IMPLEMENTS'.

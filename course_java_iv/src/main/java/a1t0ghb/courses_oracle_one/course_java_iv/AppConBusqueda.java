@@ -11,6 +11,8 @@ package a1t0ghb.courses_oracle_one.course_java_iv;
 //  IMPORTS - UTILITIES.
 //  Java utilities:
 //  - Shortcut for importing ALL Java Utils: 'import java.util.*;'.
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;                       //  User input via console / terminal.
 import java.io.FileWriter;                      //  Export content to local drive.
 
@@ -45,74 +47,92 @@ public class AppConBusqueda {
         // System.out.println("Hello World!");
 
         //  INITIALIZATION OF INSTANCES.
-        
+        //  Creates an empty list for instances of 'Titulo'.
+        List<Titulo> titulos = new ArrayList<>();
+
+        //  Create instance for JSON tranformations (APPROACH 2: using JSON naming for JSON mapping, with RECORD file 'TituloOmdb').
+        Gson gson = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)       //  To avoid manual mapping. Transform parameters according to policy, for easier matching.
+            .setPrettyPrinting()                                            //  Option to export 'pretty' JSON, instead of one-liner.
+            .create();
+
         //  'Scanner' as class to receive input of user from console.
         //  - Use in conjunction with try-with-resources, to AUTOMATICALLY close resources and manage try-cath exceptions. Ref: 'https://www.w3schools.com/java/java_try_catch_resources.asp'.
         try (Scanner lectura = new Scanner(System.in)) {
 
-            System.out.println("Escriba el nombre de una película: ");
-            var busqueda = lectura.nextLine();                          //  Method from class 'Scanner' to receive a String (default) as an input.
+            //  Makes a loop to continuosly capture movies input from user and retrieve its data.
+            while (true) {
 
-            //  Creates string for API search.
-            //  - NOTE: manual adjustment for replacing spaces with plus signs '+', so query doesn't throw error for this specific case.
-            //  - Alternative: use java classs URLEncoder: 'https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URLEncoder.html'.
-            var direccion = "https://www.omdbapi.com/?apikey=d4d0bf92&t=" + busqueda.replace(" ", "+");
+                System.out.println("Escriba el nombre de una película: ");
+                var busqueda = lectura.nextLine();                          //  Method from class 'Scanner' to receive a String (default) as an input.
 
-            //  Try-catch exception 'e'. Cases:
-            //  - 'IllegalArgumentException': if a URI can't be created properly with method '.create()'; if there are spaces.
-            //  - 'NumberFormatException': if a String can't be converted to Integer, when creating instance of class 'Titulo'.
-            //  - 'ErrorEnConversionDeDuracionException': CUSTOM exception.
-            //  - 'Exception': general error catch.
-            try {
+                //  Adds condition for exit while; if user input is equals to 'salir'.
+                if (busqueda.equalsIgnoreCase("salir")) {
+                    break;
+                }
 
-                //  HTTP request.
-                HttpClient client = HttpClient.newHttpClient();             //  Creates http client. Requires IMPORT package 'java.net.http.HttpClient'.
-                HttpRequest request = HttpRequest.newBuilder()              //  Creates http request, using pattern BUILDER. 'HttpRequest' is NOT a class, more likey an interface, which means an instance of it CAN'T be created as a regular class. Requires IMPORT class 'java.net.http.HttpRequest'.
-                    .uri(URI.create(direccion))                             //  Uses an instance of class 'URI'. Requires IMPORT package 'java.net.URI'.
-                    .build();                                               //  Instruction from pattern BUILDER. Way to recognize it.
-                
-                HttpResponse<String> response = client                      //  Creates http response. Requires IMPORT package 'java.net.http.HttpResponse'.
-                    .send(request, HttpResponse.BodyHandlers.ofString());   //  Method '.send()' requires handle EXCEPTIONS. For now, will be added to 'public static void main(String[] args) { ... }'.
+                //  Creates string for API search.
+                //  - NOTE: manual adjustment for replacing spaces with plus signs '+', so query doesn't throw error for this specific case.
+                //  - Alternative: use java classs URLEncoder: 'https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URLEncoder.html'.
+                var direccion = "https://www.omdbapi.com/?apikey=d4d0bf92&t=" + busqueda.replace(" ", "+");
 
-                //  Prints body of HTTP request; i.e. JSON, in raw format.
-                String json = response.body();
-                System.out.println(json);
+                //  Try-catch exception 'e'. Cases:
+                //  - 'IllegalArgumentException': if a URI can't be created properly with method '.create()'; if there are spaces.
+                //  - 'NumberFormatException': if a String can't be converted to Integer, when creating instance of class 'Titulo'.
+                //  - 'ErrorEnConversionDeDuracionException': CUSTOM exception.
+                //  - 'Exception': general error catch.
+                try {
 
-                // //  Create instance for JSON tranformations (APPROACH 1: direct JSON mapping, without RECORD file 'TituloOmdb').
-                // Gson gson = new Gson();
-                // //  NOTE: to match class attributes vs. JSON fields, it requires to use ANNOTATIONS in class; i.e. 'Titulo'.
-                // Titulo miTitulo = gson.fromJson(json, Titulo.class);
-                // // System.out.println("Titulo: " + miTitulo.getNombre());      //  When not having defined method of '.toString()'.
-                // System.out.println(miTitulo);
+                    //  HTTP request.
+                    HttpClient client = HttpClient.newHttpClient();             //  Creates http client. Requires IMPORT package 'java.net.http.HttpClient'.
+                    HttpRequest request = HttpRequest.newBuilder()              //  Creates http request, using pattern BUILDER. 'HttpRequest' is NOT a class, more likey an interface, which means an instance of it CAN'T be created as a regular class. Requires IMPORT class 'java.net.http.HttpRequest'.
+                        .uri(URI.create(direccion))                             //  Uses an instance of class 'URI'. Requires IMPORT package 'java.net.URI'.
+                        .build();                                               //  Instruction from pattern BUILDER. Way to recognize it.
+                    
+                    HttpResponse<String> response = client                      //  Creates http response. Requires IMPORT package 'java.net.http.HttpResponse'.
+                        .send(request, HttpResponse.BodyHandlers.ofString());   //  Method '.send()' requires handle EXCEPTIONS. For now, will be added to 'public static void main(String[] args) { ... }'.
 
-                //  Create instance for JSON tranformations (APPROACH 2: using JSON naming for JSON mapping, with RECORD file 'TituloOmdb').
-                Gson gson = new GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)       //  To avoid manual mapping. Transform parameters according to policy, for easier matching.
-                    .create();
-                TituloOmdb miTituloOmdb = gson.fromJson(json, TituloOmdb.class);
-                System.out.println("\nClase intermedia (Record) 'TituloOmdb':\n" + miTituloOmdb + "\n");
+                    //  Prints body of HTTP request; i.e. JSON, in raw format.
+                    String json = response.body();
+                    System.out.println(json);
 
-                Titulo miTitulo = new Titulo(miTituloOmdb);                 //  This approach requires a NEW CONSTRUCTOR for 'Titulo' that receives an instace of 'TituloOmdb'.
-                System.out.println("Info. titulo (convertido):\n" + miTitulo + "\n");
+                    // //  Create instance for JSON tranformations (APPROACH 1: direct JSON mapping, without RECORD file 'TituloOmdb').
+                    // Gson gson = new Gson();
+                    // //  NOTE: to match class attributes vs. JSON fields, it requires to use ANNOTATIONS in class; i.e. 'Titulo'.
+                    // Titulo miTitulo = gson.fromJson(json, Titulo.class);
+                    // // System.out.println("Titulo: " + miTitulo.getNombre());      //  When not having defined method of '.toString()'.
+                    // System.out.println(miTitulo);
 
-                //  Export as txt.
-                FileWriter escritura = new FileWriter("peliculas.txt");
-                escritura.write(miTitulo.toString());                       //  Export instance of 'Titulo', by default to PROJECT FOLDER (not inside any 'package'); e.g. '.../course_java_iv/peliculas.txt'
-                escritura.close();                                          //  Close IO.
-                
-            } catch (NumberFormatException e) {
-                System.out.println("Ocurrio un error: " + e.getMessage());
-            } catch (IllegalArgumentException e) {
-                System.out.println("Error en la URI; verifique la dirección: " + e.getMessage());
-            } catch (ErrorEnConversionDeDuracionException e) {
-                System.out.println("Ocurrio un error de conversión: " + e.getMessage());
-            } catch (Exception e) {
-                System.out.println("Ocurrio un error INESPERADO: " + e.getMessage());
+                    TituloOmdb miTituloOmdb = gson.fromJson(json, TituloOmdb.class);
+                    System.out.println("\nClase intermedia (Record) 'TituloOmdb':\n" + miTituloOmdb + "\n");
+
+                    Titulo miTitulo = new Titulo(miTituloOmdb);                 //  This approach requires a NEW CONSTRUCTOR for 'Titulo' that receives an instace of 'TituloOmdb'.
+                    System.out.println("Info. titulo (convertido):\n" + miTitulo + "\n");
+
+                    titulos.add(miTitulo);
+                    
+                } catch (NumberFormatException e) {
+                    System.out.println("Ocurrio un error: " + e.getMessage());
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Error en la URI; verifique la dirección: " + e.getMessage());
+                } catch (ErrorEnConversionDeDuracionException e) {
+                    System.out.println("Ocurrio un error de conversión: " + e.getMessage());
+                } catch (Exception e) {
+                    System.out.println("Ocurrio un error INESPERADO: " + e.getMessage());
+                }
+
             }
 
-            System.out.println("Finalizó ejecución del programa.\n");
-            
         }
+
+        System.out.println(titulos);
+
+        //  Export as JSON.
+        FileWriter escritura = new FileWriter("titulos.json");
+        escritura.write(gson.toJson(titulos));                      //  Export instance of 'Titulo', by default to PROJECT FOLDER (not inside any 'package'); e.g. '.../course_java_iv/peliculas.txt'
+        escritura.close();                                          //  Close IO.
+
+        System.out.println("Finalizó ejecución del programa.\n");
 
     }
     
