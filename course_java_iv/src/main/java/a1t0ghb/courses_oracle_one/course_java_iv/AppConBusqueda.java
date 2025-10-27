@@ -38,6 +38,7 @@ import a1t0ghb.courses_oracle_one.course_java_iv.models.Titulo;
  */
 public class AppConBusqueda {
 
+    @SuppressWarnings("UseSpecificCatch")
     public static void main(String[] args) throws IOException, InterruptedException {
         // System.out.println("Hello World!");
 
@@ -53,42 +54,51 @@ public class AppConBusqueda {
             //  Creates string for API search.
             var direccion = "https://www.omdbapi.com/?apikey=d4d0bf92&t=" + busqueda;
 
-            //  HTTP request.
-            HttpClient client = HttpClient.newHttpClient();             //  Creates http client. Requires IMPORT package 'java.net.http.HttpClient'.
-            HttpRequest request = HttpRequest.newBuilder()              //  Creates http request, using pattern BUILDER. 'HttpRequest' is NOT a class, more likey an interface, which means an instance of it CAN'T be created as a regular class. Requires IMPORT class 'java.net.http.HttpRequest'.
-                .uri(URI.create(direccion))                             //  Uses an instance of class 'URI'. Requires IMPORT package 'java.net.URI'.
-                .build();                                               //  Instruction from pattern BUILDER. Way to recognize it.
-            
-            HttpResponse<String> response = client                      //  Creates http response. Requires IMPORT package 'java.net.http.HttpResponse'.
-                .send(request, HttpResponse.BodyHandlers.ofString());   //  Method '.send()' requires handle EXCEPTIONS. For now, will be added to 'public static void main(String[] args) { ... }'.
-
-            //  Prints body of HTTP request; i.e. JSON, in raw format.
-            String json = response.body();
-            System.out.println(json);
-
-            // //  Create instance for JSON tranformations (APPROACH 1: direct JSON mapping, without RECORD file 'TituloOmdb').
-            // Gson gson = new Gson();
-            // //  NOTE: to match class attributes vs. JSON fields, it requires to use ANNOTATIONS in class; i.e. 'Titulo'.
-            // Titulo miTitulo = gson.fromJson(json, Titulo.class);
-            // // System.out.println("Titulo: " + miTitulo.getNombre());      //  When not having defined method of '.toString()'.
-            // System.out.println(miTitulo);
-
-            //  Create instance for JSON tranformations (APPROACH 2: using JSON naming for JSON mapping, with RECORD file 'TituloOmdb').
-            Gson gson = new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)       //  To avoid manual mapping. Transform parameters according to policy, for easier matching.
-                .create();
-            TituloOmdb miTituloOmdb = gson.fromJson(json, TituloOmdb.class);
-            System.out.println("\nClase intermedia (Record) 'TituloOmdb':\n" + miTituloOmdb + "\n");
-
             //  Try-catch exception 'e'. Cases:
-            //  - 'NumberFormatException': if a String can't be converted to Integer.
+            //  - 'IllegalArgumentException': if a URI can't be created properly with method '.create()'; if there are spaces.
+            //  - 'NumberFormatException': if a String can't be converted to Integer, when creating instance of class 'Titulo'.
+            //  - 'Exception': general error catch.
             try {
+
+                //  HTTP request.
+                HttpClient client = HttpClient.newHttpClient();             //  Creates http client. Requires IMPORT package 'java.net.http.HttpClient'.
+                HttpRequest request = HttpRequest.newBuilder()              //  Creates http request, using pattern BUILDER. 'HttpRequest' is NOT a class, more likey an interface, which means an instance of it CAN'T be created as a regular class. Requires IMPORT class 'java.net.http.HttpRequest'.
+                    .uri(URI.create(direccion))                             //  Uses an instance of class 'URI'. Requires IMPORT package 'java.net.URI'.
+                    .build();                                               //  Instruction from pattern BUILDER. Way to recognize it.
+                
+                HttpResponse<String> response = client                      //  Creates http response. Requires IMPORT package 'java.net.http.HttpResponse'.
+                    .send(request, HttpResponse.BodyHandlers.ofString());   //  Method '.send()' requires handle EXCEPTIONS. For now, will be added to 'public static void main(String[] args) { ... }'.
+
+                //  Prints body of HTTP request; i.e. JSON, in raw format.
+                String json = response.body();
+                System.out.println(json);
+
+                // //  Create instance for JSON tranformations (APPROACH 1: direct JSON mapping, without RECORD file 'TituloOmdb').
+                // Gson gson = new Gson();
+                // //  NOTE: to match class attributes vs. JSON fields, it requires to use ANNOTATIONS in class; i.e. 'Titulo'.
+                // Titulo miTitulo = gson.fromJson(json, Titulo.class);
+                // // System.out.println("Titulo: " + miTitulo.getNombre());      //  When not having defined method of '.toString()'.
+                // System.out.println(miTitulo);
+
+                //  Create instance for JSON tranformations (APPROACH 2: using JSON naming for JSON mapping, with RECORD file 'TituloOmdb').
+                Gson gson = new GsonBuilder()
+                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)       //  To avoid manual mapping. Transform parameters according to policy, for easier matching.
+                    .create();
+                TituloOmdb miTituloOmdb = gson.fromJson(json, TituloOmdb.class);
+                System.out.println("\nClase intermedia (Record) 'TituloOmdb':\n" + miTituloOmdb + "\n");
+
                 Titulo miTitulo = new Titulo(miTituloOmdb);                 //  This approach requires a NEW CONSTRUCTOR for 'Titulo' that receives an instace of 'TituloOmdb'.
-                System.out.println("Info. titulo:\n" + miTitulo + "\n");
+                System.out.println("Info. titulo (convertido):\n" + miTitulo + "\n");
+                
             } catch (NumberFormatException e) {
                 System.out.println("Ocurrio un error: " + e.getMessage());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error en la URI; verifique la dirección: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Ocurrio un error INESPERADO: " + e.getMessage());
             }
-            System.out.println("Finalizó ejecución del programa.");
+
+            System.out.println("Finalizó ejecución del programa.\n");
             
         }
 
