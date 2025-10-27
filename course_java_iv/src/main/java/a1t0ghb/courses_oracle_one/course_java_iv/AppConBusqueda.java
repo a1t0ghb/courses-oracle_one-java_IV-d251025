@@ -31,6 +31,7 @@ import com.google.gson.FieldNamingPolicy;       //  For JSON field naming suppor
 //  IMPORTS - CUSTOM CLASSES AND CUSTOM INTERFACES.
 import a1t0ghb.courses_oracle_one.course_java_iv.models.TituloOmdb;
 import a1t0ghb.courses_oracle_one.course_java_iv.models.Titulo;
+import a1t0ghb.courses_oracle_one.course_java_iv.exceptions.ErrorEnConversionDeDuracionException;
 
 /**
  *
@@ -52,11 +53,14 @@ public class AppConBusqueda {
             var busqueda = lectura.nextLine();                          //  Method from class 'Scanner' to receive a String (default) as an input.
 
             //  Creates string for API search.
-            var direccion = "https://www.omdbapi.com/?apikey=d4d0bf92&t=" + busqueda;
+            //  - NOTE: manual adjustment for replacing spaces with plus signs '+', so query doesn't throw error for this specific case.
+            //  - Alternative: use java classs URLEncoder: 'https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URLEncoder.html'.
+            var direccion = "https://www.omdbapi.com/?apikey=d4d0bf92&t=" + busqueda.replace(" ", "+");
 
             //  Try-catch exception 'e'. Cases:
             //  - 'IllegalArgumentException': if a URI can't be created properly with method '.create()'; if there are spaces.
             //  - 'NumberFormatException': if a String can't be converted to Integer, when creating instance of class 'Titulo'.
+            //  - 'ErrorEnConversionDeDuracionException': CUSTOM exception.
             //  - 'Exception': general error catch.
             try {
 
@@ -94,6 +98,8 @@ public class AppConBusqueda {
                 System.out.println("Ocurrio un error: " + e.getMessage());
             } catch (IllegalArgumentException e) {
                 System.out.println("Error en la URI; verifique la dirección: " + e.getMessage());
+            } catch (ErrorEnConversionDeDuracionException e) {
+                System.out.println("Ocurrio un error de conversión: " + e.getMessage());
             } catch (Exception e) {
                 System.out.println("Ocurrio un error INESPERADO: " + e.getMessage());
             }

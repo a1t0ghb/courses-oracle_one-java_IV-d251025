@@ -18,6 +18,7 @@ package a1t0ghb.courses_oracle_one.course_java_iv.models;
 // import com.google.gson.annotations.SerializedName;                  //  JSON transformations: match class attributes to JSON fields (APPROACH 1: direct JSON mapping, without RECORD file 'TituloOmdb').
 
 //  IMPORTS - CUSTOM CLASSES AND CUSTOM INTERFACES.
+import a1t0ghb.courses_oracle_one.course_java_iv.exceptions.ErrorEnConversionDeDuracionException;
 
 /**
  *
@@ -36,7 +37,7 @@ public class Titulo implements Comparable<Titulo> {
     private double sumaDeLasEvaluaciones;       //  According to 'new business rule', users now can rate a title (movie or series).
     private int totalDeLasEvaluaciones;         //  Counter for amount of ratings.
 
-    //  CONSTRUCTOR
+    //  CONSTRUCTOR.
     //  - Same name as Class, and custom definition.
     //  - If we define a constructor for the superclass, now ALL OF ITS SUBCLASSES must have a MATCHING constructor.
     public Titulo(String nombre, int fechaDeLanzamiento) {
@@ -50,8 +51,13 @@ public class Titulo implements Comparable<Titulo> {
         //  Attributes from a 'Record' are accessed via the attribute name and parenthesis; THERE ARE NO GETTERS.
         this.nombre = tituloOmdb.title();
         this.fechaDeLanzamiento = Integer.valueOf(tituloOmdb.year());       //  Cast string to integer: 'https://stackoverflow.com/questions/508665/difference-between-parseint-and-valueof-in-java'.
+        //  Custom verification of case that 'would' throw an exception (custom).
+        if (tituloOmdb.runtime().contains("N/A")) {
+            //  Throws CUSTOM exception: class 'ErrorEnConversionDeDuracionException'.
+            throw new ErrorEnConversionDeDuracionException("No pude convertir la duración, porque contiene 'N/A'.");
+        }
         this.duracionEnMinutos = Integer.valueOf(tituloOmdb.runtime()
-            .substring(0,2));                                               //  API returns string, such as '60 min'. Extract first 3 characters (in case +99 min, but still RISKY) to cast to Integer.
+            .substring(0,3).replace(" ", ""));                              //  API returns string, such as '60 min'. Extract first 3 characters (in case +99 min, but still RISKY) to cast to Integer.
     }
 
     //  ATTRIBUTE'S 'GETTERS'.
